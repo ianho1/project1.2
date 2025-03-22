@@ -1,0 +1,82 @@
+CREATE TABLE MotionPicture (
+    id INT PRIMARY KEY,
+    name CHAR(255),
+    rating FLOAT CHECK (rating >= 0 AND rating <= 10),
+    production CHAR(255),
+    budget INT CHECK (budget > 0)
+);
+
+CREATE TABLE Users (
+    email CHAR(255) PRIMARY KEY,
+    name CHAR(255),
+    age INT CHECK (age >= 0)
+);
+
+
+CREATE TABLE Likes (
+    uemail CHAR(255) NOT NULL,
+    mpid INT NOT NULL,
+    PRIMARY KEY (uemail, mpid), 
+    FOREIGN KEY (uemail) REFERENCES Users(email) ON DELETE CASCADE,  
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Movie (
+    mpid INT PRIMARY KEY,
+    boxoffice_collection FLOAT CHECK (boxoffice_collection >= 0),
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Series (
+    mpid INT PRIMARY KEY,
+    season_count INT CHECK (season_count >= 1),
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE
+);
+
+CREATE TABLE People (
+    id INT PRIMARY KEY,
+    name CHAR(255),
+    nationality CHAR(255),
+    dob DATE,
+    gender CHAR(10)
+);
+
+CREATE TABLE Role (
+    mpid INT,
+    pid INT,
+    role_name CHAR(255),
+    PRIMARY KEY (mpid, pid, role_name),
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES People(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Award (
+    mpid INT,
+    pid INT,
+    award_name CHAR(255),
+    award_year INT,
+    PRIMARY KEY (mpid, pid, award_name, award_year),
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE,
+    FOREIGN KEY (pid) REFERENCES People(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Genre (
+    mpid INT NOT NULL,
+    genre_name CHAR(100),
+    PRIMARY KEY (mpid, genre_name),
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Location (
+    mpid INT NOT NULL,
+    zip CHAR(20),
+    city CHAR(255),
+    country CHAR(255),
+    PRIMARY KEY (mpid, zip, city, country),
+    FOREIGN KEY (mpid) REFERENCES MotionPicture(id) ON DELETE CASCADE
+);
+
+
+
