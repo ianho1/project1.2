@@ -133,14 +133,14 @@ def find_youngest_oldest_actors():
     #              In case of a tie, list all of them.
 
     query = """
-        SELECT p.name, (a.award_year - YEAR(p.dob)) AS age
-        FROM Award a
-        JOIN People p ON a.pid = p.id
-        WHERE p.dob IS NOT NULL 
+       SELECT p.name, (a.award_year - YEAR(p.dob)) AS age
+       FROM Award a
+       JOIN People p ON a.pid = p.id
+       WHERE p.dob IS NOT NULL 
             AND p.dob > '1900-01-01'  
-            AND a.award_year >= YEAR(p.dob)
-        GROUP BY p.name, p.dob, a.award_year
-        HAVING COUNT(a.mpid) > 0;
+            AND a.award_year > YEAR(p.dob) 
+       GROUP BY p.name, p.dob, a.award_year
+       HAVING COUNT(a.mpid) > 0;
     """
 
     with Database() as db:
